@@ -15,7 +15,7 @@ class Registration(Document):
 			frappe.throw("Enter Alphabets only without any space")
 
 		#to check the validation of email
-		regex= '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+		regex= '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\D{2,3}$'
 		if not (re.search(regex,self.email)):
 				frappe.throw("Its not valid email")
 
@@ -65,7 +65,6 @@ class Registration(Document):
 			reference_name=self.name,
 
 			)
-		print("Email sent")
 		frappe.msgprint(_("Email Sent Successfully"))
 
 		

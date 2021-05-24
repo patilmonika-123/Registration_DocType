@@ -14,13 +14,6 @@ frappe.query_reports["SI report"] = {
             "fieldname":"end_date",
             "label": __("End Date"),
             "fieldtype": "Date",
-        },
-        {
-            "fieldname":"total",
-            "label": __("Total"),
-            "fieldtype": "Currency",
-        },
-
-
+        },       
 	]
 };

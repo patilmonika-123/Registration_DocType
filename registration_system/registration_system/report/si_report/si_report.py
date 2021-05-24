@@ -19,8 +19,6 @@ def get_columns(filters):
 			"fieldname": "customer",
 			"options": "Customer",
 			"width":150
-
-
 		},
 		{
 			"label": _("Company"),
@@ -34,8 +32,41 @@ def get_columns(filters):
 			"fieldname": "posting_date"
 		},
 		{
-			"label": _("Total"),
+			"label": _("Item  code"),
+			"fieldtype": "Link",
+			"fieldname": "item_code",
+			"options": "Item",
+			"width":100
+		},
+		{
+			"label": _("Item Name"),
+			"fieldtype": "Data",
+			"fieldname": "item_name",
+			"width":100
+		},
+		{
+			"label": _("Quantity"),
+			"fieldtype": "Float",
+			"fieldname": "qty",
+		},
+		{
+			"label": _("Rate"),
+			"fieldtype": "Currency",
+			"fieldname": "rate",
+			"options": "currency",
+
+		},
+		{
+			"label": _("Total Amount"),
+			"fieldtype": "Currency",
+			"fieldname": "amount",
+			"options": "currency",
+
+		},
+		{
+			"label": _("Grand Total"),
 			"fieldname": "total",
+			"fieldtype": "Currency",
 			"options": "Currency",
 			"width":100
 		},
@@ -44,8 +75,14 @@ def get_columns(filters):
 	return columns
 
 def get_data(filters):
-	print(filters.get("start_date"),filters.get("end_date"))
 
-	data = frappe.db.sql("""select customer,company,posting_date,total from `tabSales Invoice` where total>'{2}' and posting_date BETWEEN '{0}' and '{1}' """.format(filters.get("start_date"),filters.get("end_date"),filters.get("total")))
+	data = frappe.db.sql("""select A.customer,A.company,A.posting_date,
+							B.item_code,B.item_name,B.qty,B.rate,B.amount,A.total 
+							from `tabSales Invoice` AS A 
+							INNER JOIN `tabSales Invoice Item` AS B 
+							ON A.name=B.parent 
+							where total>10000 
+							and posting_date BETWEEN '{0}' and '{1}'
+							""".format(filters.get("start_date"),filters.get("end_date")))
 	
 	return data
