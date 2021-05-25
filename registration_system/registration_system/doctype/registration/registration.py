@@ -14,11 +14,6 @@ class Registration(Document):
 		if not (self.first_name).isalpha():
 			frappe.throw("Enter Alphabets only without any space")
 
-		#to check the validation of email
-		regex= '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\D{2,3}$'
-		if not (re.search(regex,self.email)):
-				frappe.throw("Its not valid email")
-
 		#to check the validation of password
 		if len(self.password)<8:
 			frappe.throw("Length of password should be greater than 8")
@@ -37,15 +32,7 @@ class Registration(Document):
 
 		elif re.search("[\s]",self.password):
 			frappe.throw("In password no whitespace allowed")
-
-		#to check the validation of telephone
-		Pattern="(0/91)?[7-9][0-9]{9}"
-		if not (re.search(Pattern,self.telephone)):
-			frappe.throw("Invalid telephone no.!!Enter 7,8 or 9 as first digit and telephone contain 10 digits only")
-
-
-
-
+		
 
 	def on_submit(self):
 		user = frappe.get_doc(doctype='User', first_name=self.first_name,email=self.email,new_password=self.password)
