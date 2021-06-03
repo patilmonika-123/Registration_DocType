@@ -1,0 +1,154 @@
+
+<html>
+<head>
+	<title>Print Format</title>
+	<style type="text/css">
+		.alignleft{
+    		float:left;
+		}
+		.alignright{
+   			float:right;
+		}
+		.alignment{
+   			margin-left:100px;
+		}
+		.right{
+    		margin-right:10px;
+		}
+		p{
+    		margin:0;
+    		padding:0;
+		}
+		th{
+    		font-size:15px;
+		}
+		td{
+    		font-size:10px;
+		}
+		.divider{
+    		margin-top:0em;
+    		margin-bottom:0em;
+    		border-width:2px;
+		}
+
+		table,th,td{
+    		border:1px solid gray;
+		}
+
+	</style>
+</head>
+<body>
+{% set Cname = frappe.get_doc("Company",company_name) %}
+{% set email = frappe.get_doc("Company",email) %}
+{% set web = frappe.get_doc("Company",website) %}
+{% set lg = frappe.get_doc("Company",company_logo) %}
+
+
+<!-- head,logo-->
+<div class="row">
+    <h3 class="col-md-9" style="text-align:right">Quotation</h3>
+    <img class="col-md-9" src="{{lg.company_logo}}" height="12%" width="12%" align="right"><br><br><br><br>
+
+<!-- Company info-->
+<hr style="border-width:2px;" width="100%"/>
+
+	<div class="col-md-9"><strong>{{ Cname.company_name }} PVT.LTD</strong></div>
+	<div class="col-md-9">{{frappe.db.get_value("Address",Cname.company_name+"-Office","address_line1") }}</div>
+	<div class="col-md-9">Email ID-{{ email.email }}</div>
+	<div class="col-md-9">Website-{{ web.website }}</div>
+
+<!-- Company CIN/GSTIN-->
+<hr  style="border-width:2px;" width="100%"/>
+	<div class="col-md-9"><strong>CIN-</strong>U29843PN2015PTSDF49</div>
+	<div class="col-md-9"><strong>GSTIN/UIN-</strong>{{frappe.db.get_value("Address",Cname.company_name+"-Office","gstin") }}</div>
+
+<!-- Customer name,Quote no.-->
+<hr style="border-width:2px;" width="100%"/>
+	<div class="col-md-9" style="float:left;"><strong>Customer Name-</strong> {{doc.customer_name}}</div>
+	<div class="col-md-9" style="float:right;"><strong>Quote No.:</strong> {{doc.name }}</div><br>
+<hr class="divider" width="100%"/>
+
+<!-- Customer info-->
+<div class="alignment">
+    <p>{{ frappe.db.get_value("Address",doc.customer_name+"-Billing","address_line1") }}</p><p class="alignright" style="margin-right:45px"><strong>Date: </strong> {{ frappe.format_date(doc.transaction_date) }}  
+	<p>{{ frappe.db.get_value("Address",doc.customer_name+"-Billing","city") }},{{ frappe.db.get_value("Address",doc.customer_name+"-Billing","state") }}</p>
+	<p>{{ frappe.db.get_value("Address",doc.customer_name+"-Billing","pincode") }}</p>
+	<p>{{ frappe.db.get_value("Address",doc.customer_name+"-Billing","country") }}</p>
+</div>
+
+	
+<!-- Customer contact info-->	
+<hr  style="border-width:2px;"  width="100%"/>
+    <div class="col-md-9" class="alignment"><strong> GSTIN:</strong>{{ frappe.db.get_value("Address",doc.customer_name+"-Billing","gstin") }} </div>
+    <p class="col-md-9"><strong>Contact-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{doc.customer_name}}</strong></p>
+	<p class="col-md-9"><strong>Mobile No.-</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ frappe.db.get_value("Address",doc.customer_name+"-Billing","phone") }}</p>
+    
+<hr  style="border-width:2px;" width="100%"/>
+<!--Item table-->
+<div class="col-md-9">
+<table >
+    <tbody>
+        <tr>
+            <th style="width:3%; text-align:center">Sr</th>
+            <th style="width:10%;">Product Code</th>
+            <th style="width:15%;">Product Image</th>
+            <th style="width:5%; text-align:center">HSN/SAC</th>
+            <th style="width:3%; text-align:center">Rate</th>
+            <th style="width:45%">Description </th>
+            <th style="width:3%; text-align:center">Qty.</th>
+            <th style="width:15%; text-align:center">Amount</th>
+        </tr>
+        {%- for row in doc.items -%}
+        <tr>
+            <td style="width:3%;">{{ row.idx}}</td>
+            <td style="width:10%;">{{ row.item_code}}</td>
+            <td style="width:15%;"><img src="{{row.image}}" height="10%" width="10%"></td>
+            <td style="width:5%;">{{frappe.db.get_value("GST HSN Code",doc.item_code,"hsn_code") }}</td>
+            <td style="width:5%;">{{row.rate}}</td>
+            <td>{{row.description}}</td>
+            <td>Nos{{row.qty}}</td>
+            <td>{{doc.currency}}{{row.amount}}</td>
+        </tr>
+        {%- endfor -%}
+    </tbody>
+</table>
+</div>
+
+<!-- Total detail-->
+<div class="row-col-xs-12" >
+    <div class="col-xs-7"></div>
+    <div class="col-xs-5">
+    <div class="col-xs-6"><strong>Subtotal</strong><br><strong>Discount</strong><br><strong>IGST</strong><br><strong>Grand Total</strong></div>
+    <div class="col-xs-2"><br>{{doc.additional_discount_percentage}}%<br><br><br></div>
+    <div class="col-xs-4" style="float:right;">{{doc.currency}}{{doc.total}}<br>{{doc.currency}}{{doc.discount_amount}}<br>{{doc.currency}}{{doc.total_taxes_and_charges }}<br>{{doc.currency}}{{doc.grand_total}}</div>
+    <div class="col-xs-12"><strong>In Words </strong>{{doc.in_words}}</div>
+</div>
+
+</div>
+<br><br><br><br><br>
+
+<p class="col-md-9" style="width:98%">The information contained in this document is belived to be correct but {{doc.company}} Pvt.Ltd. accepts no liability for any errors and reserves the right to
+alter specifications without notice.</p>
+
+<!-- Terms & Conditions-->
+<div class="page-break"></div>
+<p class="col-md-9"><strong>Terms & Conditions</strong></p>
+<p style="margin:0px; padding:0;">{{doc.terms}}</p>
+<p class="col-md-9"><strong>Note:</strong></p>
+<p class="col-md-9">The title of the goods will remain with {{doc.company}} Pvt.Ltd. till the receipt of 100% payment.
+<br><br>
+<p class="col-md-9" style="font-size:12px;"><strong>For company {{doc.company}} Pvt.Ltd.</strong><p>
+<p class="col-md-9" style="font-size:14px;"><strong>Prepared By</strong></p>
+<br>
+<div class="col-md-9"  style="float:left;width:30%">
+<p style="font-size:14px;"><strong>Sales Head</strong></p>
+<p style="margin-left:0em;margin-top:0em;">Electronically authorised by</p>
+</div>
+<div class="alignright" style="width:30%">
+<p style="font-size:14px;margin-right:0px"><strong>Sales Manager</strong></p>
+<p style="margin-right:20%;margin-top:0em;">Electronically authorised by</p>
+</div>
+</div>
+
+</body>
+</html> 

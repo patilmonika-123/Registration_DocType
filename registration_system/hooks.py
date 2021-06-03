@@ -8,6 +8,7 @@ app_icon = "octicon octicon-file-directory"
 app_color = "grey"
 app_email = "monika.p@indictrans.in"
 app_license = "MIT"
+fixtures = ["Print Format"]
 
 # Includes in <head>
 # ------------------

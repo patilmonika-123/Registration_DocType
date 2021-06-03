@@ -1,0 +1,47 @@
+{
+ "add_total_row": 1,
+ "columns": [],
+ "creation": "2021-06-01 14:20:08.879990",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [
+  {
+   "fieldname": "grand_total",
+   "fieldtype": "Currency",
+   "label": "Grand total",
+   "mandatory": 0,
+   "wildcard_filter": 0
+  }
+ ],
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2021-06-02 11:32:10.319270",
+ "modified_by": "Administrator",
+ "module": "Registration System",
+ "name": "QR-assign2",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT \n    `tabQuotation`.customer_name as \"Customer:Data:120\",\n    `tabQuotation`.company as \"Company:Link/Company:100\",\n    `tabQuotation`.docstatus as \"Docstatus:100\",\n    `tabQuotation`.transaction_date as \"Date:Date:100\",\n    `tabQuotation Item`.item_code as \"Item Code:Link/Item:100\",\n    `tabQuotation Item`.qty as \"Qty:Float:100\",\n    `tabQuotation Item`.rate as \"IRate :Currency/currency:100\",\n    `tabQuotation`.grand_total as \"Grand Total:Currency:100\"\n\nFROM `tabQuotation` JOIN `tabQuotation Item`\nWHERE\n    `tabQuotation Item`.qty >= %(qty)s and \n    `tabQuotation`.grand_total>10000 and \n    `tabQuotation`.transaction_date >= %(from_date)s and\n    `tabQuotation`.transaction_date <= %(to_date)s\n  \n ",
+ "ref_doctype": "Quotation",
+ "report_name": "QR-assign2",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "Maintenance User"
+  },
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Maintenance Manager"
+  },
+  {
+   "role": "Sales Head"
+  }
+ ]
+}

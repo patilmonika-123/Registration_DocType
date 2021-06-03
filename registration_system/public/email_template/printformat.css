@@ -1,0 +1,31 @@
+.alignleft{
+    float:left;
+}
+.alignright{
+    float:right;
+}
+.alignment{
+    margin-left:100px;
+}
+.right{
+    margin-right:10px;
+}
+p{
+    margin:0;
+    padding:0;
+}
+th{
+    font-size:15px;
+}
+td{
+    font-size:10px;
+}
+.divider{
+    margin-top:0em;
+    margin-bottom:0em;
+    border-width:2px;
+}
+
+table,th,td{
+    border:1px solid gray;
+}
